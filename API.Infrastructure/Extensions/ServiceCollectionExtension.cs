@@ -13,7 +13,7 @@ namespace API.Infrastructure.Extensions
         {
             services.AddDbContext<ApplicationDBContext>(options =>
             {
-                options.UseSqlServer(ContextSettings.ConnectionString);
+                options.UseSqlServer(AppSettiungs.ApplicationDBContextConnectionString);
             });
 
             services.AddScoped<DbContext, ApplicationDBContext>();
