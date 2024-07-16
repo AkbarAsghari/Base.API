@@ -9,7 +9,7 @@ namespace API.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddDBContext(this IServiceCollection services)
+        public static IServiceCollection AddDBContextDependencies(this IServiceCollection services)
         {
             services.AddDbContext<ApplicationDBContext>(options =>
             {

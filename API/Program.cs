@@ -2,6 +2,7 @@
 using API.Shared.Extensions;
 using API.Infrastructure.Extensions;
 using API.Shared;
+using API.Core.Extensions;
 
 namespace API
 {
@@ -21,8 +22,8 @@ namespace API
             builder.Services.Configure<AppSettiungs>(builder.Configuration.GetSection("AllConfigurations"));
 
             builder.Services.AddSharedDependencies();
-
-            builder.Services.AddDBContext();
+            builder.Services.AddCoreDependencies();
+            builder.Services.AddDBContextDependencies();
 
             var app = builder.Build();
 
