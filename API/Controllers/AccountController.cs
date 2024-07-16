@@ -158,9 +158,9 @@ namespace API.Controllers
         /// <response code="200">If the change is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
         [HttpPut("ChangeEmailAsync")]
-        public async Task<IActionResult> ChangeEmailAsync([FromBody] string model)
+        public async Task<IActionResult> ChangeEmailAsync([FromQuery] string email)
         {
-            return Ok(await _userService.ChangeEmailAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
+            return Ok(await _userService.ChangeEmailAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), email));
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace API.Controllers
         /// </summary>
         /// <response code="200">If successful, you will receive user information.</response>
         [ProducesResponseType(typeof(UserDTO), 200)]
-        [HttpGet("GetCurrentUser")]
-        public async Task<IActionResult> GetCurrentUser()
+        [HttpGet("GetCurrentUserAsync")]
+        public async Task<IActionResult> GetCurrentUserAsync()
         {
             return Ok(await _userService.GetByIDAsync(_contextAccessor!.HttpContext!.GetClaimsUserID()));
         }

@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using API.Infrastructure.Entities;
+using API.Shared.DTOs.Users;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +11,9 @@ namespace API.Core.Configurations
 {
     public class AutoMapperProfile : Profile
     {
+        public AutoMapperProfile()
+        {
+            CreateMap<Users, UserDTO>();
+        }
     }
 }
