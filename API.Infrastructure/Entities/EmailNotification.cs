@@ -12,6 +12,7 @@ namespace API.Infrastructure.Entities
         public string? Subject { get; set; }
         public string? Message { get; set; }
         public string? Link { get; set; }
+        public string? LinkText { get; set; }
         public bool IsDeleted { get; set; }
 
         public Users User { get; set; }

@@ -7,5 +7,6 @@
         public string Subject { get; set; }
         public string Message { get; set; }
         public string Link { get; set; }
+        public string LinkText { get; set; }
     }
 }

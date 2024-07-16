@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MD.PersianDateTime.Standard" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\API.Infrastructure\API.Infrastructure.csproj" />
     <ProjectReference Include="..\API.Shared\API.Shared.csproj" />
   </ItemGroup>
 
