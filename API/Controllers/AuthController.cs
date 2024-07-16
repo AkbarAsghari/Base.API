@@ -33,10 +33,10 @@ namespace API.Controllers
         /// <response code="200">If the authentication is successful, you will receive a token.</response>
         [ProducesResponseType(typeof(AuthUserDTO), 200)]
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("authenticateAsync")]
         public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticateDTO model)
         {
-            return Ok(await _userService.Authenticate(model.UsernameOrEmail, model.Password));
+            return Ok(await _userService.AuthenticateAsync(model.UsernameOrEmail, model.Password));
         }
 
         /// <summary>
@@ -46,10 +46,10 @@ namespace API.Controllers
         /// <response code="200">If the email is successful, you will receive Ture</response>
         [ProducesResponseType(typeof(bool), 200)]
         [AllowAnonymous]
-        [HttpPost("ForgetPassword")]
+        [HttpPost("ForgetPasswordAsync")]
         public async Task<IActionResult> ForgetPasswordAsync([FromBody] ForgetPasswordDTO model)
         {
-            return Ok(await _userService.ForgetPassword(model));
+            return Ok(await _userService.ForgetPasswordAsync(model));
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace API.Controllers
         /// <response code="200">If the Reset Password is successful, you will receive Ture</response>
         [ProducesResponseType(typeof(bool), 200)]
         [AllowAnonymous]
-        [HttpPost("ResetPassword")]
+        [HttpPost("ResetPasswordAsync")]
         public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDTO model)
         {
-            return Ok(await _userService.ResetPassword(model));
+            return Ok(await _userService.ResetPasswordAsync(model));
         }
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace API.Controllers
         /// </summary>
         /// <response code="200">If the Change Password is successful, you will receive Ture</response>
         [ProducesResponseType(typeof(bool), 200)]
-        [HttpPut("ChangePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO model)
+        [HttpPut("ChangePasswordAsync")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDTO model)
         {
-            return Ok(await _userService.ChangePassword(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
+            return Ok(await _userService.ChangePasswordAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
         }
 
         /// <summary>
@@ -82,10 +82,10 @@ namespace API.Controllers
         /// <response code="200">If the Change Role is successful, you will receive Ture</response>
         [ProducesResponseType(typeof(bool), 200)]
         [Authorize(Roles = AuthorizeRoles.Admin)]
-        [HttpPut("ChangeUserRole")]
-        public async Task<IActionResult> ChangeUserRole([FromQuery] Guid userId, RolesEnum role)
+        [HttpPut("ChangeUserRoleAsync")]
+        public async Task<IActionResult> ChangeUserRoleAsync([FromQuery] Guid userId, RolesEnum role)
         {
-            return Ok(await _userService.ChangeUserRole(userId, role));
+            return Ok(await _userService.ChangeUserRoleAsync(userId, role));
         }
 
         /// <summary>
@@ -109,10 +109,10 @@ namespace API.Controllers
         /// <response code="200">If the confirmation is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
         [AllowAnonymous]
-        [HttpPost("ConfirmEmailWithToken")]
-        public async Task<IActionResult> ConfirmEmailWithToken([FromQuery] string token)
+        [HttpPost("ConfirmEmailWithTokenAsync")]
+        public async Task<IActionResult> ConfirmEmailWithTokenAsync([FromQuery] string token)
         {
-            return Ok(await _userService.ConfirmEmailWithToken(token));
+            return Ok(await _userService.ConfirmEmailWithTokenAsync(token));
         }
 
         /// <summary>
@@ -121,10 +121,10 @@ namespace API.Controllers
         /// <remarks>Rate limit 3 times Per Day</remarks>
         /// <response code="200">If the resend confirmation email is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
-        [HttpPost("ResendConfirmEmailToken")]
-        public async Task<IActionResult> ResendConfirmEmailToken()
+        [HttpPost("ResendConfirmEmailTokenAsync")]
+        public async Task<IActionResult> ResendConfirmEmailTokenAsync()
         {
-            return Ok(await _userService.ResendConfirmEmailToken(_contextAccessor!.HttpContext!.GetClaimsUserID()));
+            return Ok(await _userService.ResendConfirmEmailTokenAsync(_contextAccessor!.HttpContext!.GetClaimsUserID()));
         }
 
         /// <summary>
@@ -132,10 +132,10 @@ namespace API.Controllers
         /// </summary>
         /// <response code="200">If the update is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] UpdateUserPersonalInfoDTO model)
+        [HttpPut("updateAsync")]
+        public async Task<IActionResult> UpdateAsync([FromBody] UpdateUserPersonalInfoDTO model)
         {
-            return Ok(await _userService.Update(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
+            return Ok(await _userService.UpdateAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
         }
 
 
@@ -145,10 +145,10 @@ namespace API.Controllers
         /// <remarks>Rate limit 20 times per day</remarks>
         /// <response code="200">If the update is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
-        [HttpPut("UpdateUsername")]
-        public async Task<IActionResult> UpdateUsername([FromQuery] string? username)
+        [HttpPut("UpdateUsernameAsync")]
+        public async Task<IActionResult> UpdateUsernameAsync([FromQuery] string? username)
         {
-            return Ok(await _userService.UpdateUsername(_contextAccessor!.HttpContext!.GetClaimsUserID(), username));
+            return Ok(await _userService.UpdateUsernameAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), username));
         }
 
         /// <summary>
@@ -157,10 +157,10 @@ namespace API.Controllers
         /// <remarks>Rate limit 3 times per day</remarks>
         /// <response code="200">If the change is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
-        [HttpPut("ChangeEmail")]
-        public async Task<IActionResult> ChangeEmail([FromBody] string model)
+        [HttpPut("ChangeEmailAsync")]
+        public async Task<IActionResult> ChangeEmailAsync([FromBody] string model)
         {
-            return Ok(await _userService.ChangeEmail(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
+            return Ok(await _userService.ChangeEmailAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace API.Controllers
         /// </summary>
         /// <response code="200">If successful, you will receive user information.</response>
         [ProducesResponseType(typeof(UserDTO), 200)]
-        [HttpGet("Get")]
-        public async Task<IActionResult> Get()
+        [HttpGet("GetCurrentUser")]
+        public async Task<IActionResult> GetCurrentUser()
         {
             return Ok(await _userService.GetByIDAsync(_contextAccessor!.HttpContext!.GetClaimsUserID()));
         }
@@ -180,10 +180,10 @@ namespace API.Controllers
         /// <response code="200">If successful, you will receive active users count.</response>
         [ProducesResponseType(typeof(int), 200)]
         [AllowAnonymous]
-        [HttpGet("UsersCount")]
-        public async Task<IActionResult> UsersCount()
+        [HttpGet("UsersCountAsync")]
+        public async Task<IActionResult> UsersCountAsync()
         {
-            return Ok(await _userService.UsersCount());
+            return Ok(await _userService.UsersCountAsync());
         }
 
         /// <summary>
@@ -192,8 +192,8 @@ namespace API.Controllers
         /// <response code="200">If successful, you will receive active user information.</response>
         [ProducesResponseType(typeof(UserDTO), 200)]
         [Authorize(Roles = AuthorizeRoles.Admin)]
-        [HttpGet("GetUser")]
-        public async Task<IActionResult> GetUser([FromQuery] Guid Id)
+        [HttpGet("GetUserAsync")]
+        public async Task<IActionResult> GetUserAsync([FromQuery] Guid Id)
         {
             return Ok(await _userService.GetByIDAsync(Id));
         }
@@ -204,10 +204,10 @@ namespace API.Controllers
         /// <response code="200">If successful, you will receive all active users information.</response>
         [ProducesResponseType(typeof(IEnumerable<UserDTO>), 200)]
         [Authorize(Roles = AuthorizeRoles.Admin)]
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await _userService.GetAll());
+            return Ok(await _userService.GetAllAsync());
         }
 
         /// <summary>
@@ -215,10 +215,10 @@ namespace API.Controllers
         /// </summary>
         /// <response code="200">If successful, you will receive True.</response>
         [ProducesResponseType(typeof(bool), 200)]
-        [HttpDelete("DeactivateAccount")]
-        public async Task<IActionResult> DeactivateAccount()
+        [HttpDelete("DeactivateAccountAsync")]
+        public async Task<IActionResult> DeactivateAccountAsync()
         {
-            return Ok(await _userService.DeactivateAccount(_contextAccessor!.HttpContext!.GetClaimsUserID()));
+            return Ok(await _userService.DeactivateAccountAsync(_contextAccessor!.HttpContext!.GetClaimsUserID()));
         }
 
     }

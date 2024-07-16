@@ -35,7 +35,7 @@ namespace API.Core.Services
             _EmailNotificationService = emailNotificationService;
         }
 
-        public async Task<AuthUserDTO> Authenticate(string usernameOrEmail, string password)
+        public async Task<AuthUserDTO> AuthenticateAsync(string usernameOrEmail, string password)
         {
             if (string.IsNullOrEmpty(usernameOrEmail.Trim()))
                 throw new UsernameIsNotValidException();
@@ -128,7 +128,7 @@ namespace API.Core.Services
             }
         }
 
-        public async Task<bool> ConfirmEmailWithToken(string token)
+        public async Task<bool> ConfirmEmailWithTokenAsync(string token)
         {
             var confirmUserTicket = await _UnitOfWork.Repository<ResetPasswordTickets>().IgnoreQueryFilters()
                 .SingleOrDefault(x => x.Token == token);
@@ -152,7 +152,7 @@ namespace API.Core.Services
             return await _UnitOfWork.Save();
         }
 
-        public async Task<bool> Update(Guid userId, UpdateUserPersonalInfoDTO updateUser)
+        public async Task<bool> UpdateAsync(Guid userId, UpdateUserPersonalInfoDTO updateUser)
         {
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
@@ -174,17 +174,17 @@ namespace API.Core.Services
             }
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAll()
+        public async Task<IEnumerable<UserDTO>> GetAllAsync()
         {
             return _Mapper.Map<IEnumerable<UserDTO>>(await _UnitOfWork.Repository<Users>().GetEntities()
             .OrderByDescending(x => x.CreateDate).ToListAsync());
         }
 
-        public async Task<int> UsersCount()
+        public async Task<int> UsersCountAsync()
         {
             return await _UnitOfWork.Repository<Users>().GetEntities().CountAsync();
         }
-        public async Task<bool> ForgetPassword(ForgetPasswordDTO forgetPassword)
+        public async Task<bool> ForgetPasswordAsync(ForgetPasswordDTO forgetPassword)
         {
             if (!RegexTool.IsValidEmail(forgetPassword.Email))
                 throw new EmailIsNotValidException();
@@ -215,7 +215,7 @@ namespace API.Core.Services
             return false;
         }
 
-        public async Task<bool> ResetPassword(ResetPasswordDTO resetPassword)
+        public async Task<bool> ResetPasswordAsync(ResetPasswordDTO resetPassword)
         {
             var resetPasswordTicket = await _UnitOfWork.Repository<ResetPasswordTickets>().IgnoreQueryFilters()
                 .SingleOrDefault(x => x.Token == resetPassword.Token);
@@ -244,7 +244,7 @@ namespace API.Core.Services
             return await _UnitOfWork.Save();
         }
 
-        public async Task<bool> ChangePassword(Guid userId, ChangePasswordDTO changePassword)
+        public async Task<bool> ChangePasswordAsync(Guid userId, ChangePasswordDTO changePassword)
         {
             if (changePassword.NewPassword.Length < 8)
                 throw new PasswordLessThan8CharacterException();
@@ -266,7 +266,7 @@ namespace API.Core.Services
             return await _UnitOfWork.Save();
         }
 
-        public async Task<bool> DeactivateAccount(Guid ID)
+        public async Task<bool> DeactivateAccountAsync(Guid ID)
         {
             return false;
 
@@ -280,7 +280,7 @@ namespace API.Core.Services
             return await _UnitOfWork.Save();
         }
 
-        public async Task<bool> ChangeEmail(Guid userId, string email)
+        public async Task<bool> ChangeEmailAsync(Guid userId, string email)
         {
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
@@ -310,7 +310,7 @@ namespace API.Core.Services
             }
         }
 
-        public async Task<bool> ResendConfirmEmailToken(Guid userId)
+        public async Task<bool> ResendConfirmEmailTokenAsync(Guid userId)
         {
             var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
 
@@ -343,7 +343,7 @@ namespace API.Core.Services
             return false;
         }
 
-        public async Task<bool> ChangeUserRole(Guid userId, RolesEnum role)
+        public async Task<bool> ChangeUserRoleAsync(Guid userId, RolesEnum role)
         {
             var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
 
@@ -357,7 +357,7 @@ namespace API.Core.Services
             return await _UnitOfWork.Save();
         }
 
-        public async Task<bool> UpdateUsername(Guid userId, string? Username)
+        public async Task<bool> UpdateUsernameAsync(Guid userId, string? Username)
         {
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {

@@ -5,25 +5,25 @@ namespace DevMark.ApplicationCore.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<AuthUserDTO> Authenticate(string usernameOrEmail, string password);
+        Task<AuthUserDTO> AuthenticateAsync(string usernameOrEmail, string password);
         Task<AuthUserDTO> RegisterAsync(RegisterUserDTO registerUser);
-        Task<bool> Update(Guid userId, UpdateUserPersonalInfoDTO updateUser);
-        Task<bool> UpdateUsername(Guid userId, string? Username);
-        Task<bool> ChangeUserRole(Guid userId, RolesEnum role);
+        Task<bool> UpdateAsync(Guid userId, UpdateUserPersonalInfoDTO updateUser);
+        Task<bool> UpdateUsernameAsync(Guid userId, string? Username);
+        Task<bool> ChangeUserRoleAsync(Guid userId, RolesEnum role);
 
         Task<UserDTO> GetByIDAsync(Guid ID);
-        Task<IEnumerable<UserDTO>> GetAll();
-        Task<int> UsersCount();
+        Task<IEnumerable<UserDTO>> GetAllAsync();
+        Task<int> UsersCountAsync();
 
-        Task<bool> ForgetPassword(ForgetPasswordDTO forgetPassword);
-        Task<bool> ResetPassword(ResetPasswordDTO resetPassword);
-        Task<bool> ChangePassword(Guid userId, ChangePasswordDTO changePassword);
+        Task<bool> ForgetPasswordAsync(ForgetPasswordDTO forgetPassword);
+        Task<bool> ResetPasswordAsync(ResetPasswordDTO resetPassword);
+        Task<bool> ChangePasswordAsync(Guid userId, ChangePasswordDTO changePassword);
 
-        Task<bool> ChangeEmail(Guid userId, string email);
+        Task<bool> ChangeEmailAsync(Guid userId, string email);
 
-        Task<bool> ResendConfirmEmailToken(Guid userId);
-        Task<bool> ConfirmEmailWithToken(string token);
+        Task<bool> ResendConfirmEmailTokenAsync(Guid userId);
+        Task<bool> ConfirmEmailWithTokenAsync(string token);
 
-        Task<bool> DeactivateAccount(Guid ID);
+        Task<bool> DeactivateAccountAsync(Guid ID);
     }
 }
