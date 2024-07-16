@@ -280,24 +280,24 @@ namespace API.Core.Services
             return await _UnitOfWork.Save();
         }
 
-        public async Task<bool> ChangeEmail(Guid userId, ChangeEmailDTO changeEmailDTO)
+        public async Task<bool> ChangeEmail(Guid userId, string email)
         {
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
-                if (!RegexTool.IsValidEmail(changeEmailDTO.Email))
+                if (!RegexTool.IsValidEmail(email))
                     throw new EmailIsNotValidException();
 
-                if (await _UnitOfWork.Repository<Users>().IgnoreQueryFilters().AnyAsync(x => x.Email.ToLower() == changeEmailDTO.Email.ToLower() && x.ID != userId))
+                if (await _UnitOfWork.Repository<Users>().IgnoreQueryFilters().AnyAsync(x => x.Email.ToLower() == email.ToLower() && x.ID != userId))
                     throw new EmailIsDuplicateException();
 
                 var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
                     throw new UserNotFoundException();
-                if (existUser.Email == changeEmailDTO.Email.Trim())
+                if (existUser.Email == email.Trim())
                     return true;
 
-                existUser.Email = changeEmailDTO.Email.Trim();
+                existUser.Email = email.Trim();
                 existUser.IsEmailApproved = false;
 
                 _UnitOfWork.Repository<Users>().Update(existUser);
