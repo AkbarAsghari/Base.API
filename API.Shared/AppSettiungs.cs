@@ -23,7 +23,7 @@ namespace API.Shared
         public const string Merchant = "zibal";
         public const string CallBackUrl = "https://localhost:5066//payment/callback";
 #else
-        public const string Merchant = "64c3d877cbbc27001b930173";
+        public const string Merchant = "xxxxxx";
         public const string CallBackUrl = "https://dnslab.link/payment/callback";
 #endif
     }
