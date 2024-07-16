@@ -96,8 +96,8 @@ namespace API.Controllers
         [ProducesResponseType(typeof(AuthUserDTO), 200)]
         [ServiceFilter(typeof(ClientIpCheckActionFilter))]
         [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDTO model)
+        [HttpPost("RegisterAsync")]
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserDTO model)
         {
             return Ok(await _userService.RegisterAsync(model));
         }

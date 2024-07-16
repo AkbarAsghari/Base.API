@@ -5,6 +5,7 @@ using API.Shared;
 using API.Core.Extensions;
 using API.Shared.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
+using API.Attributes;
 
 namespace API
 {
@@ -22,6 +23,15 @@ namespace API
             builder.Services.AddSwaggerGen();
 
             builder.Services.Configure<AppSettiungs>(builder.Configuration.GetSection("AllConfigurations"));
+
+            //IP Limit
+            builder.Services.AddScoped<ClientIpCheckActionFilter>(container =>
+            {
+                var loggerFactory = container.GetRequiredService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger<ClientIpCheckActionFilter>();
+
+                return new ClientIpCheckActionFilter(AdminSafeListIPs.IPList, logger);
+            });
 
             builder.Services.AddSharedDependencies();
             builder.Services.AddCoreDependencies();
@@ -46,6 +56,7 @@ namespace API
                 {
                     await context.Response.WriteAsJsonAsync(new { Error = "Not_Handler_Exception"});
                 }
+
             }));
 
 

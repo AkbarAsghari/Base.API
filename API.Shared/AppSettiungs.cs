@@ -34,4 +34,9 @@ namespace API.Shared
         public const string Writer = "Writer";
         public const string User = "User";
     }
+
+    public sealed class AdminSafeListIPs 
+    {
+        public const string IPList = "127.0.0.1;::1;194.147.142.136;192.168.1.7";
+    }
 }
