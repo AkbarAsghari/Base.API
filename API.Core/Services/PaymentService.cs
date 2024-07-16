@@ -33,7 +33,7 @@ namespace DNSLab.ApplicationCore.Services
         {
             return await _UnitOfWork.Repository<Payment>()
                 .IgnoreQueryFilters()
-                .GetEntities(x => x.TransactionStatusId == (int)ZibalStatusEnum.AwaitingPayment &&
+                .GetEntities(x => x.PaymentStatusId == (int)ZibalStatusEnum.AwaitingPayment &&
                                   x.CreateDate >= DateTime.UtcNow.AddDays(-1))
                 .Select(x => x.TrackId).ToListAsync();
         }
@@ -56,7 +56,7 @@ namespace DNSLab.ApplicationCore.Services
             if (paymentResponse.Result == (int)ZibalResultEnum.Success)
             {
                 long? refNumber = string.IsNullOrEmpty(paymentResponse.RefNumber) ? null : Convert.ToInt64(paymentResponse.RefNumber);
-                existTransaction.TransactionStatusId = paymentResponse.Status;
+                existTransaction.PaymentStatusId = paymentResponse.Status;
                 existTransaction.CardNumber = paymentResponse.CardNumber;
                 existTransaction.RefNumber = refNumber;
                 existTransaction.PaidAt = paymentResponse.PaidAt;
@@ -73,7 +73,7 @@ namespace DNSLab.ApplicationCore.Services
             if (existTransaction == null)
                 throw new PaymentNotFoundException();
 
-            if (existTransaction.TransactionStatusId == (int)ZibalStatusEnum.PaidConfirmed)
+            if (existTransaction.PaymentStatusId == (int)ZibalStatusEnum.PaidConfirmed)
                 return true;
 
             var requestData = new VerifyDTO
@@ -88,7 +88,7 @@ namespace DNSLab.ApplicationCore.Services
             if (paymentResponse.Result == (int)ZibalResultEnum.Success)
             {
                 long? refNumber = string.IsNullOrEmpty(paymentResponse.RefNumber) ? null : Convert.ToInt64(paymentResponse.RefNumber);
-                existTransaction.TransactionStatusId = paymentResponse.Status!.Value;
+                existTransaction.PaymentStatusId = paymentResponse.Status!.Value;
                 existTransaction.CardNumber = paymentResponse.CardNumber;
                 existTransaction.RefNumber = refNumber;
                 existTransaction.PaidAt = paymentResponse.PaidAt;
