@@ -5,14 +5,14 @@ namespace API.Shared.Exceptions
 {
     public abstract class BaseException : Exception
     {
-        HttpStatusCode _HttpStatusCode;
+        public HttpStatusCode HttpStatusCode { get; private set; }
         string _PersianMessage;
 
         protected BaseException(HttpStatusCode httpStatusCode, string key, string persianMessage = null)
             : base(key, null)
         {
             _PersianMessage = persianMessage;
-            _HttpStatusCode = httpStatusCode;
+            HttpStatusCode = httpStatusCode;
         }
 
         public ExceptionDTO GenerateResponse()
@@ -21,7 +21,7 @@ namespace API.Shared.Exceptions
             {
                 PersianMessage = _PersianMessage,
                 Key = Message,
-                HttpStatusCode = _HttpStatusCode
+                HttpStatusCode = HttpStatusCode
             };
         }
     }
