@@ -15,4 +15,16 @@ namespace API.Shared
     {
         public const string ApplicationDBContextConnectionString = "Data Source=.;Initial Catalog=ApplicationDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
     }
+
+    public sealed class Zibal
+    {
+        public const string APIUrl = "https://gateway.zibal.ir";
+#if DEBUG
+        public const string Merchant = "zibal";
+        public const string CallBackUrl = "https://localhost:5066//payment/callback";
+#else
+        public const string Merchant = "64c3d877cbbc27001b930173";
+        public const string CallBackUrl = "https://dnslab.link/payment/callback";
+#endif
+    }
 }
