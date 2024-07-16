@@ -27,4 +27,11 @@ namespace API.Shared
         public const string CallBackUrl = "https://dnslab.link/payment/callback";
 #endif
     }
+
+    public sealed class AuthorizeRoles
+    {
+        public const string Admin = "Admin";
+        public const string Writer = "Writer";
+        public const string User = "User";
+    }
 }
