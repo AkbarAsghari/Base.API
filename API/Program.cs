@@ -3,6 +3,8 @@ using API.Shared.Extensions;
 using API.Infrastructure.Extensions;
 using API.Shared;
 using API.Core.Extensions;
+using API.Shared.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace API
 {
@@ -26,6 +28,26 @@ namespace API
             builder.Services.AddDBContextDependencies();
 
             var app = builder.Build();
+
+
+            //Exception Handler
+            app.UseExceptionHandler(c => c.Run(async context =>
+            {
+                var exception = context.Features
+                    .Get<IExceptionHandlerPathFeature>()!
+                    .Error;
+
+                if (exception is BaseException)
+                {
+                    context.Response.StatusCode = (int)((BaseException)exception).HttpStatusCode;
+                    await context.Response.WriteAsJsonAsync(((BaseException)exception).GenerateResponse());
+                }
+                else
+                {
+                    await context.Response.WriteAsJsonAsync(new { Error = "Not_Handler_Exception"});
+                }
+            }));
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
