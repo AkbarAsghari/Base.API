@@ -16,11 +16,11 @@ namespace API.Controllers
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private IUserService _userService;
         private readonly IHttpContextAccessor _contextAccessor;
-        public AuthController(IUserService userService, IHttpContextAccessor contextAccessor)
+        public AccountController(IUserService userService, IHttpContextAccessor contextAccessor)
         {
             _userService = userService;
             _contextAccessor = contextAccessor;
