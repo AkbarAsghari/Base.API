@@ -158,7 +158,7 @@ namespace API.Controllers
         /// <response code="200">If the change is successful, you will receive a True.</response>
         [ProducesResponseType(typeof(bool), 200)]
         [HttpPut("ChangeEmail")]
-        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDTO model)
+        public async Task<IActionResult> ChangeEmail([FromBody] string model)
         {
             return Ok(await _userService.ChangeEmail(_contextAccessor!.HttpContext!.GetClaimsUserID(), model));
         }

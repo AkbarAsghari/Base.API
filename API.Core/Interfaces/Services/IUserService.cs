@@ -19,7 +19,7 @@ namespace DevMark.ApplicationCore.Interfaces.Services
         Task<bool> ResetPassword(ResetPasswordDTO resetPassword);
         Task<bool> ChangePassword(Guid userId, ChangePasswordDTO changePassword);
 
-        Task<bool> ChangeEmail(Guid userId, ChangeEmailDTO changeEmailDTO);
+        Task<bool> ChangeEmail(Guid userId, string email);
 
         Task<bool> ResendConfirmEmailToken(Guid userId);
         Task<bool> ConfirmEmailWithToken(string token);
