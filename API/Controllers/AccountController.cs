@@ -164,6 +164,17 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Change mobile
+        /// </summary>
+        /// <response code="200">If the change is successful, you will receive a True.</response>
+        [ProducesResponseType(typeof(bool), 200)]
+        [HttpPut("ChangeMobileAsync")]
+        public async Task<IActionResult> ChangeMobileAsync([FromQuery] string mobile)
+        {
+            return Ok(await _userService.ChangeMobileAsync(_contextAccessor!.HttpContext!.GetClaimsUserID(), mobile));
+        }
+
+        /// <summary>
         /// Get user information by header authorize
         /// </summary>
         /// <response code="200">If successful, you will receive user information.</response>

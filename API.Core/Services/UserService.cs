@@ -165,7 +165,6 @@ namespace API.Core.Services
                 existUser.FirstName = updateUser.FirstName;
                 existUser.LastName = updateUser.LastName;
                 existUser.Company = updateUser.Company;
-                existUser.Mobile = updateUser.Mobile;
 
                 _UnitOfWork.Repository<Users>().Update(existUser);
                 await _UnitOfWork.Save();
@@ -305,6 +304,34 @@ namespace API.Core.Services
                 await _UnitOfWork.Save();
 
                 await SendConfirmEmailToken(userId, EmailTypeEnum.ConfirmEmail);
+                await transaction.CommitAsync();
+                return true;
+            }
+        }
+
+        public async Task<bool> ChangeMobileAsync(Guid userId, string mobile)
+        {
+            using (var transaction = await _UnitOfWork.GetDBTransaction)
+            {
+                if (!RegexTool.IsValidMobile(mobile))
+                    throw new MobileIsNotValidException();
+
+                if (await _UnitOfWork.Repository<Users>().IgnoreQueryFilters().AnyAsync(x => x.Mobile == mobile.Trim() && x.ID != userId))
+                    throw new MobileIsDuplicateException();
+
+                var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
+
+                if (existUser == null)
+                    throw new UserNotFoundException();
+                if (existUser.Mobile == mobile.Trim())
+                    return true;
+
+                existUser.Mobile = mobile.Trim();
+
+                _UnitOfWork.Repository<Users>().Update(existUser);
+
+                await _UnitOfWork.Save();
+
                 await transaction.CommitAsync();
                 return true;
             }

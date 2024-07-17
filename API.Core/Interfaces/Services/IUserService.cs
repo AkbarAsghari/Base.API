@@ -20,6 +20,7 @@ namespace DevMark.ApplicationCore.Interfaces.Services
         Task<bool> ChangePasswordAsync(Guid userId, ChangePasswordDTO changePassword);
 
         Task<bool> ChangeEmailAsync(Guid userId, string email);
+        Task<bool> ChangeMobileAsync(Guid userId, string mobile);
 
         Task<bool> ResendConfirmEmailTokenAsync(Guid userId);
         Task<bool> ConfirmEmailWithTokenAsync(string token);
