@@ -35,7 +35,8 @@ namespace API.Middlewares
                     Status = (int)ex.HttpStatusCode,
                     Type = ex.GetType().Name,
                     Title = "Handled Exception",
-                    Detail = ex.Message
+                    Detail = ex.Message,
+                    Extensions = ex.Extensions
                 };
 
                 context.Response.ContentType = "application/json";

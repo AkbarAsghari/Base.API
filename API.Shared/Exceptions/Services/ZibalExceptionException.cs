@@ -11,7 +11,8 @@ namespace API.Shared.Exceptions
     public class ZibalExceptionException : BaseException
     {
         public ZibalExceptionException(ZibalResultEnum zibalResult) :
-            base(HttpStatusCode.ServiceUnavailable, $"Paymanet_Exception", zibalResult.ToString())
+            base(HttpStatusCode.ServiceUnavailable, $"Paymanet_Exception",
+                 new Dictionary<ExceptionLanguageEnum, object?> { { ExceptionLanguageEnum.Fa, zibalResult.ToString() } })
         {
         }
     }

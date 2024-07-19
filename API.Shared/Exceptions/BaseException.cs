@@ -1,4 +1,4 @@
-﻿using API.Shared.DTOs.BasicData;
+﻿using API.Shared.Enums;
 using System.Net;
 
 namespace API.Shared.Exceptions
@@ -6,22 +6,15 @@ namespace API.Shared.Exceptions
     public abstract class BaseException : Exception
     {
         public HttpStatusCode HttpStatusCode { get; private set; }
-        string _PersianMessage;
+        public Dictionary<string, object?> Extensions { get; private set; }
 
-        protected BaseException(HttpStatusCode httpStatusCode, string key, string persianMessage = null)
+        protected BaseException(HttpStatusCode httpStatusCode, string key, Dictionary<ExceptionLanguageEnum, object?>? Extensions = null)
             : base(key, null)
         {
-            _PersianMessage = persianMessage;
             HttpStatusCode = httpStatusCode;
-        }
-
-        public ExceptionDTO GenerateResponse()
-        {
-            return new ExceptionDTO
+            this.Extensions = new Dictionary<string, object?>
             {
-                PersianMessage = _PersianMessage,
-                Key = Message,
-                HttpStatusCode = HttpStatusCode
+                { "Messages" , Extensions }
             };
         }
     }
