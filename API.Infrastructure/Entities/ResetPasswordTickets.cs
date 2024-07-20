@@ -11,7 +11,7 @@ namespace API.Infrastructure.Entities
         public DateTime ExpirationDate { get; set; }
         public bool IsTokenUsed { get; set; }
 
-        public Users User { get; set; }
+        public User User { get; set; }
     }
 
     public class ResetPasswordsTicketsEntityTypeConfiguration : IEntityTypeConfiguration<ResetPasswordTickets>

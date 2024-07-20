@@ -40,11 +40,11 @@ namespace API.Core.Services
             if (string.IsNullOrEmpty(usernameOrEmail.Trim()))
                 throw new UsernameIsNotValidException();
 
-            Users? user;
+            User? user;
             if (RegexTool.IsValidEmail(usernameOrEmail.Trim()))
-                user = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.Email.ToLower() == usernameOrEmail.ToLower() && x.Active == true);
+                user = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.Email.ToLower() == usernameOrEmail.ToLower() && x.Active == true);
             else
-                user = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.Username!.ToLower() == usernameOrEmail.ToLower() && x.Active == true);
+                user = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.Username!.ToLower() == usernameOrEmail.ToLower() && x.Active == true);
 
             if (user == null)
                 throw new UsernameOrPasswordIsWrongException();
@@ -58,7 +58,7 @@ namespace API.Core.Services
             return new AuthUserDTO(token);
         }
 
-        private string GenerateJWTToken(Users user)
+        private string GenerateJWTToken(User user)
         {
             // generate token that is valid for 365 days
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -84,7 +84,7 @@ namespace API.Core.Services
 
         public async Task<UserDTO> GetByIDAsync(Guid ID)
         {
-            var user = await _UnitOfWork.Repository<Users>()
+            var user = await _UnitOfWork.Repository<User>()
                 .FirstOrDefault(x => x.ID == ID);
 
             var nonePasswordUser = user.WithoutPassword();
@@ -101,10 +101,10 @@ namespace API.Core.Services
                 if (!RegexTool.IsValidEmail(registerUser.Email))
                     throw new EmailIsNotValidException();
 
-                if (await _UnitOfWork.Repository<Users>().AnyAsync(x => x.Email.ToLower() == registerUser.Email.ToLower()))
+                if (await _UnitOfWork.Repository<User>().AnyAsync(x => x.Email.ToLower() == registerUser.Email.ToLower()))
                     throw new EmailIsDuplicateException();
 
-                Users user = new Users();
+                User user = new User();
 
                 user.Email = registerUser.Email;
                 user.Active = true;
@@ -117,7 +117,7 @@ namespace API.Core.Services
                 user.Password = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
-                _UnitOfWork.Repository<Users>().Insert(user);
+                _UnitOfWork.Repository<User>().Insert(user);
 
                 await _UnitOfWork.Save();
 
@@ -140,11 +140,11 @@ namespace API.Core.Services
             if (confirmUserTicket.IsTokenUsed)
                 throw new TokenUsedBeforeException();
 
-            var existUser = await _UnitOfWork.Repository<Users>().SingleOrDefault(x => x.ID == confirmUserTicket.UserId);
+            var existUser = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == confirmUserTicket.UserId);
 
             existUser.IsEmailApproved = true;
 
-            _UnitOfWork.Repository<Users>().Update(existUser);
+            _UnitOfWork.Repository<User>().Update(existUser);
 
             confirmUserTicket.IsTokenUsed = true;
             _UnitOfWork.Repository<ResetPasswordTickets>().Update(confirmUserTicket);
@@ -156,7 +156,7 @@ namespace API.Core.Services
         {
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
-                var existUser = await _UnitOfWork.Repository<Users>()
+                var existUser = await _UnitOfWork.Repository<User>()
                     .FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
@@ -166,7 +166,7 @@ namespace API.Core.Services
                 existUser.LastName = updateUser.LastName;
                 existUser.Company = updateUser.Company;
 
-                _UnitOfWork.Repository<Users>().Update(existUser);
+                _UnitOfWork.Repository<User>().Update(existUser);
                 await _UnitOfWork.Save();
                 await transaction.CommitAsync();
                 return true;
@@ -175,20 +175,20 @@ namespace API.Core.Services
 
         public async Task<IEnumerable<UserDTO>> GetAllAsync()
         {
-            return _Mapper.Map<IEnumerable<UserDTO>>(await _UnitOfWork.Repository<Users>().GetEntities()
+            return _Mapper.Map<IEnumerable<UserDTO>>(await _UnitOfWork.Repository<User>().GetEntities()
             .OrderByDescending(x => x.CreateDate).ToListAsync());
         }
 
         public async Task<int> UsersCountAsync()
         {
-            return await _UnitOfWork.Repository<Users>().GetEntities().CountAsync();
+            return await _UnitOfWork.Repository<User>().GetEntities().CountAsync();
         }
         public async Task<bool> ForgetPasswordAsync(ForgetPasswordDTO forgetPassword)
         {
             if (!RegexTool.IsValidEmail(forgetPassword.Email))
                 throw new EmailIsNotValidException();
 
-            var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.Email.ToLower() == forgetPassword.Email.ToLower());
+            var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.Email.ToLower() == forgetPassword.Email.ToLower());
             if (existUser == null)
                 throw new UserNotFoundException();
 
@@ -227,7 +227,7 @@ namespace API.Core.Services
             if (resetPasswordTicket.IsTokenUsed)
                 throw new TokenUsedBeforeException();
 
-            var existUser = await _UnitOfWork.Repository<Users>().SingleOrDefault(x => x.ID == resetPasswordTicket.UserId);
+            var existUser = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == resetPasswordTicket.UserId);
 
             string passwordHash, passwordSalt;
             HashTool.CreatePasswordHash(resetPassword.Password, out passwordHash, out passwordSalt);
@@ -235,7 +235,7 @@ namespace API.Core.Services
             existUser.Password = passwordHash;
             existUser.PasswordSalt = passwordSalt;
 
-            _UnitOfWork.Repository<Users>().Update(existUser);
+            _UnitOfWork.Repository<User>().Update(existUser);
 
             resetPasswordTicket.IsTokenUsed = true;
             _UnitOfWork.Repository<ResetPasswordTickets>().Update(resetPasswordTicket);
@@ -248,7 +248,7 @@ namespace API.Core.Services
             if (changePassword.NewPassword.Length < 8)
                 throw new PasswordLessThan8CharacterException();
 
-            var existUser = await _UnitOfWork.Repository<Users>().SingleOrDefault(x => x.ID == userId);
+            var existUser = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == userId);
             if (existUser == null)
                 throw new UserNotFoundException();
 
@@ -261,7 +261,7 @@ namespace API.Core.Services
             existUser.Password = passwordHash;
             existUser.PasswordSalt = passwordSalt;
 
-            _UnitOfWork.Repository<Users>().Update(existUser);
+            _UnitOfWork.Repository<User>().Update(existUser);
             return await _UnitOfWork.Save();
         }
 
@@ -269,12 +269,12 @@ namespace API.Core.Services
         {
             return false;
 
-            var user = await _UnitOfWork.Repository<Users>().SingleOrDefault(x => x.ID == ID);
+            var user = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == ID);
             if (user == null)
                 throw new UserNotFoundException();
 
             user.Active = false;
-            _UnitOfWork.Repository<Users>().Update(user);
+            _UnitOfWork.Repository<User>().Update(user);
 
             return await _UnitOfWork.Save();
         }
@@ -286,10 +286,10 @@ namespace API.Core.Services
                 if (!RegexTool.IsValidEmail(email))
                     throw new EmailIsNotValidException();
 
-                if (await _UnitOfWork.Repository<Users>().IgnoreQueryFilters().AnyAsync(x => x.Email.ToLower() == email.ToLower() && x.ID != userId))
+                if (await _UnitOfWork.Repository<User>().IgnoreQueryFilters().AnyAsync(x => x.Email.ToLower() == email.ToLower() && x.ID != userId))
                     throw new EmailIsDuplicateException();
 
-                var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
+                var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
                     throw new UserNotFoundException();
@@ -299,7 +299,7 @@ namespace API.Core.Services
                 existUser.Email = email.Trim();
                 existUser.IsEmailApproved = false;
 
-                _UnitOfWork.Repository<Users>().Update(existUser);
+                _UnitOfWork.Repository<User>().Update(existUser);
 
                 await _UnitOfWork.Save();
 
@@ -316,10 +316,10 @@ namespace API.Core.Services
                 if (!RegexTool.IsValidMobile(mobile))
                     throw new MobileIsNotValidException();
 
-                if (await _UnitOfWork.Repository<Users>().IgnoreQueryFilters().AnyAsync(x => x.Mobile == mobile.Trim() && x.ID != userId))
+                if (await _UnitOfWork.Repository<User>().IgnoreQueryFilters().AnyAsync(x => x.Mobile == mobile.Trim() && x.ID != userId))
                     throw new MobileIsDuplicateException();
 
-                var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
+                var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
                     throw new UserNotFoundException();
@@ -328,7 +328,7 @@ namespace API.Core.Services
 
                 existUser.Mobile = mobile.Trim();
 
-                _UnitOfWork.Repository<Users>().Update(existUser);
+                _UnitOfWork.Repository<User>().Update(existUser);
 
                 await _UnitOfWork.Save();
 
@@ -339,7 +339,7 @@ namespace API.Core.Services
 
         public async Task<bool> ResendConfirmEmailTokenAsync(Guid userId)
         {
-            var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
+            var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
             if (existUser == null)
                 throw new UserNotFoundException();
@@ -372,14 +372,14 @@ namespace API.Core.Services
 
         public async Task<bool> ChangeUserRoleAsync(Guid userId, RolesEnum role)
         {
-            var existUser = await _UnitOfWork.Repository<Users>().FirstOrDefault(x => x.ID == userId);
+            var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
             if (existUser == null)
                 throw new UserNotFoundException();
 
             existUser.Role = (int)role;
 
-            _UnitOfWork.Repository<Users>().Update(existUser);
+            _UnitOfWork.Repository<User>().Update(existUser);
 
             return await _UnitOfWork.Save();
         }
@@ -395,11 +395,11 @@ namespace API.Core.Services
                     if (!RegexTool.IsValidUsername(Username))
                         throw new UsernameIsNotValidException();
 
-                    if (await _UnitOfWork.Repository<Users>().AnyAsync(x => x.Username!.ToLower() == Username.ToLower() && x.ID != userId))
+                    if (await _UnitOfWork.Repository<User>().AnyAsync(x => x.Username!.ToLower() == Username.ToLower() && x.ID != userId))
                         throw new UsernameIsDuplicateException();
                 }
 
-                var existUser = await _UnitOfWork.Repository<Users>()
+                var existUser = await _UnitOfWork.Repository<User>()
                         .FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)

@@ -15,7 +15,7 @@ namespace API.Infrastructure.Entities
         public string? LinkText { get; set; }
         public bool IsDeleted { get; set; }
 
-        public Users User { get; set; }
+        public User User { get; set; }
         public EmailType EmailType { get; set; }
         public EmailStatus EmailStatus { get; set; }
     }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace API.Infrastructure.Entities
 {
-    public class Users : BaseEntity
+    public class User : BaseEntity
     {
         public string? Username { get; set; }
         public string Password { get; set; }
@@ -18,9 +18,9 @@ namespace API.Infrastructure.Entities
         public bool Active { get; set; }
     }
 
-    public class UsersEntityTypeConfiguration : IEntityTypeConfiguration<Users>
+    public class UsersEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Users> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasIndex(x => x.Username);
             builder.HasIndex(x => x.Email).IsUnique();

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240716104514_init")]
+    [Migration("20240720210200_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -182,7 +182,7 @@ namespace API.Infrastructure.Migrations
                     b.ToTable("ResetPasswordTickets");
                 });
 
-            modelBuilder.Entity("API.Infrastructure.Entities.Users", b =>
+            modelBuilder.Entity("API.Infrastructure.Entities.User", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -237,7 +237,7 @@ namespace API.Infrastructure.Migrations
 
                     b.HasIndex("Username");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("API.Infrastructure.Entities.EmailNotification", b =>
@@ -254,7 +254,7 @@ namespace API.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Infrastructure.Entities.Users", "User")
+                    b.HasOne("API.Infrastructure.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -269,7 +269,7 @@ namespace API.Infrastructure.Migrations
 
             modelBuilder.Entity("API.Infrastructure.Entities.ResetPasswordTickets", b =>
                 {
-                    b.HasOne("API.Infrastructure.Entities.Users", "User")
+                    b.HasOne("API.Infrastructure.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

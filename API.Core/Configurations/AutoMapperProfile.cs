@@ -13,7 +13,7 @@ namespace API.Core.Configurations
     {
         public AutoMapperProfile()
         {
-            CreateMap<Users, UserDTO>();
+            CreateMap<User, UserDTO>();
         }
     }
 }
