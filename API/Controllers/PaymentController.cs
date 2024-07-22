@@ -15,10 +15,10 @@ namespace API.Controllers
             _TransactionService = transactionService;
         }
 
-        [HttpGet("Verify")]
-        public async Task<IActionResult> Verify(long trackId)
+        [HttpGet("VerifyAsync")]
+        public async Task<IActionResult> VerifyAsync(long trackId)
         {
-            return Ok(await _TransactionService.Verify(trackId));
+            return Ok(await _TransactionService.VerifyAsync(trackId));
         }
     }
 }

@@ -17,20 +17,20 @@ namespace API.Infrastructure.Entities
         {
             builder.HasData(new List<PaymentStatus>
             {
-                new PaymentStatus { Id = -1 , Description = "Awaiting payment" },
-                new PaymentStatus { Id = -2 , Description = "Internal error" },
-                new PaymentStatus { Id = 1 , Description = "Paid - Confirmed" },
-                new PaymentStatus { Id = 2 , Description = "Paid - Unverified" },
-                new PaymentStatus { Id = 3 , Description = "Canceled by user" },
-                new PaymentStatus { Id = 4 , Description = "The card number is invalid" },
-                new PaymentStatus { Id = 5 , Description = "The account balance is insufficient" },
-                new PaymentStatus { Id = 6 , Description = "The entered password is wrong" },
-                new PaymentStatus { Id = 7 , Description = "The number of requests is over the limit" },
-                new PaymentStatus { Id = 8 , Description = "The number of online payments per day is more than the allowed limit" },
-                new PaymentStatus { Id = 9 , Description = "The amount of daily internet payment is more than the allowed limit" },
-                new PaymentStatus { Id = 10 , Description = "The issuer of the card is invalid" },
-                new PaymentStatus { Id = 11 , Description = "Switch error" },
-                new PaymentStatus { Id = 12 , Description = "The card is not accessible" },
+                new PaymentStatus { Id = -1 , Description = "منتظر پرداخت" },
+                new PaymentStatus { Id = -2 , Description = "خطای داخلی" },
+                new PaymentStatus { Id = 1 , Description = "پرداخت شده - تایید" },
+                new PaymentStatus { Id = 2 , Description = "پرداخت شده - عدم تایید" },
+                new PaymentStatus { Id = 3 , Description = "انصراف از طرف کاربر" },
+                new PaymentStatus { Id = 4 , Description = "شماره کارت تا معتبر میباشد" },
+                new PaymentStatus { Id = 5 , Description = "موجودی حساب کافی نیست" },
+                new PaymentStatus { Id = 6 , Description = "رمز وارد شده اشتباه است" },
+                new PaymentStatus { Id = 7 , Description = "تعداد درخواست ها بیش از حد مجاز است" },
+                new PaymentStatus { Id = 8 , Description = "تعداد پرداخت های آنلاین در روز بیش از حد مجاز است" },
+                new PaymentStatus { Id = 9 , Description = "میزان پرداخت اینترنتی روزانه بیش از حد مجاز می باشد" },
+                new PaymentStatus { Id = 10 , Description = "صادر کننده کارت نامعتبر است" },
+                new PaymentStatus { Id = 11 , Description = "خطای سوئیچ" },
+                new PaymentStatus { Id = 12 , Description = "کارت در دسترس نمیباشد" },
             });
         }
     }

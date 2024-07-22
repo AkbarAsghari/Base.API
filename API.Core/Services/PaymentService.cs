@@ -67,7 +67,7 @@ namespace API.Core.Services
                 await _UnitOfWork.Save(Guid.Empty);
         }
 
-        public async Task<bool> Verify(long trackId)
+        public async Task<bool> VerifyAsync(long trackId)
         {
             var existTransaction = await _UnitOfWork.Repository<Payment>().FirstOrDefault(x => x.TrackId == trackId);
             if (existTransaction == null)
