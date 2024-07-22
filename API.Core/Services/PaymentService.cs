@@ -38,7 +38,7 @@ namespace API.Core.Services
                 .Select(x => x.TrackId).ToListAsync();
         }
 
-        public async Task Inquiry(long trackId)
+        public async Task InquiryAsync(long trackId)
         {
             var existTransaction = await _UnitOfWork.Repository<Payment>().FirstOrDefault(x => x.TrackId == trackId);
             if (existTransaction == null)

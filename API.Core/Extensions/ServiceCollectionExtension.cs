@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Quartz;
+using API.Core.ScheduleJobs;
 
 namespace API.Core.Extensions
 {
@@ -41,6 +43,27 @@ namespace API.Core.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailNotificationService, EmailNotificationService>();
             services.AddScoped<IPaymentService, PaymentService>();
+
+
+            //Quarts Scheduler
+            services.AddQuartz(q =>
+            {
+                // these are the defaults
+                q.UseSimpleTypeLoader();
+                q.UseInMemoryStore();
+                q.UseDefaultThreadPool(tp =>
+                {
+                    tp.MaxConcurrency = 1;
+                });
+
+                //Payments
+                q.ScheduleJob<InquiryPaymentsStatusJob>(trigger => trigger
+                .StartNow().WithSimpleSchedule(x => x.WithIntervalInMinutes(60).RepeatForever()));
+
+            });
+
+            services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 
             return services;
         }
