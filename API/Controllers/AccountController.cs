@@ -1,5 +1,5 @@
 ﻿using API.Shared.DTOs.Users;
-using DevMark.ApplicationCore.Interfaces.Services;
+using API.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using API.Shared.Extensions;

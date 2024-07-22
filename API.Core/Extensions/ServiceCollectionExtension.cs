@@ -2,8 +2,6 @@
 using API.Core.Interfaces.Services;
 using API.Core.Services;
 using API.Shared;
-using DevMark.ApplicationCore.Interfaces.Services;
-using DNSLab.ApplicationCore.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;

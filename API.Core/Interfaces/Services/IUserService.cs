@@ -1,7 +1,7 @@
 ﻿using API.Shared.DTOs.Users;
 using API.Shared.Enums;
 
-namespace DevMark.ApplicationCore.Interfaces.Services
+namespace API.Core.Interfaces.Services
 {
     public interface IUserService
     {

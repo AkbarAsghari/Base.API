@@ -9,7 +9,6 @@ using API.Shared.Enums;
 using API.Shared.Exceptions;
 using API.Shared.Utilities;
 using AutoMapper;
-using DevMark.ApplicationCore.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;

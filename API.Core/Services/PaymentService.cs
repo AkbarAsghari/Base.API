@@ -13,7 +13,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-namespace DNSLab.ApplicationCore.Services
+namespace API.Core.Services
 {
     public class PaymentService : IPaymentService, IDisposable
     {
