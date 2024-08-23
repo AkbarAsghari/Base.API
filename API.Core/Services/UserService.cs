@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,25 +55,34 @@ namespace API.Core.Services
                 throw new UsernameOrPasswordIsWrongException();
 
             string refreshToken = TokenUtility.GenerateRefreshToken();
+            DateTime expiryTime = DateTime.UtcNow.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays);
+
             user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = expiryTime;
 
             await _UnitOfWork.Save();
 
-            return new AuthUserDTO(TokenUtility.GenerateToken(user), refreshToken);
+            return new AuthUserDTO(TokenUtility.GenerateToken(user), refreshToken, expiryTime);
         }
 
         public async Task<AuthUserDTO> GenerateTokenWithRefreshTokenAsync(string refreshToken)
         {
             var user = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.RefreshToken == refreshToken && x.Active == true);
             if (user == null)
-                throw new UsernameOrPasswordIsWrongException();
+                throw new TokenNotFoundException();
+
+            if (user.RefreshTokenExpiryTime.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays) < DateTime.UtcNow)
+                throw new TokenExpiredException();
 
             string newRefreshToken = TokenUtility.GenerateRefreshToken();
+            DateTime expiryTime = DateTime.UtcNow.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays);
+
             user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = expiryTime;
 
             await _UnitOfWork.Save();
 
-            return new AuthUserDTO(TokenUtility.GenerateToken(user), newRefreshToken);
+            return new AuthUserDTO(TokenUtility.GenerateToken(user), newRefreshToken, expiryTime);
         }
 
         public async Task<UserDTO> GetByIDAsync(Guid ID)
@@ -111,7 +121,10 @@ namespace API.Core.Services
                 user.PasswordSalt = passwordSalt;
 
                 string refreshToken = TokenUtility.GenerateRefreshToken();
+                DateTime expiryTime = DateTime.UtcNow.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays);
+
                 user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = expiryTime;
 
                 _UnitOfWork.Repository<User>().Insert(user);
 
@@ -120,7 +133,7 @@ namespace API.Core.Services
                 await SendConfirmEmailToken(user.ID, EmailTypeEnum.ConfirmEmail);
 
                 transaction.Commit();
-                return new AuthUserDTO(TokenUtility.GenerateToken(user), refreshToken);
+                return new AuthUserDTO(TokenUtility.GenerateToken(user), refreshToken, expiryTime);
             }
         }
 

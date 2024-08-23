@@ -16,6 +16,7 @@ namespace API.Infrastructure.Entities
         public bool IsEmailApproved { get; set; }
         public int Role { get; set; }
         public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
         public bool Active { get; set; }
     }
 

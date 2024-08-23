@@ -9,6 +9,8 @@ namespace API.Shared
     public sealed class JWTSettings
     {
         public const string Secret = "7xnC3Ew6zjQAfgyqWaCrvFqSEb6zFEVC285FCbBNm4YsansX9TYeaeWF2SQj8CLLmtgPuHdEn3Hp2YWLvLQfBDLe7dp6FKGR3zg8S6p6KV5BLRXRdDWF7kw5pJLEj4mX";
+
+        public const int RefreshTokenExpiryTimeValidDays = 7;
     }
 
     public sealed class AppSettiungs
