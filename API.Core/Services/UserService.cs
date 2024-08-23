@@ -74,15 +74,9 @@ namespace API.Core.Services
             if (user.RefreshTokenExpiryTime.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays) < DateTime.UtcNow)
                 throw new TokenExpiredException();
 
-            string newRefreshToken = TokenUtility.GenerateRefreshToken();
-            DateTime expiryTime = DateTime.UtcNow.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays);
-
-            user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = expiryTime;
-
             await _UnitOfWork.Save();
 
-            return new AuthUserDTO(TokenUtility.GenerateToken(user), newRefreshToken, expiryTime);
+            return new AuthUserDTO(TokenUtility.GenerateToken(user), user.RefreshToken, user.RefreshTokenExpiryTime);
         }
 
         public async Task<UserDTO> GetByIDAsync(Guid ID)
