@@ -1,5 +1,6 @@
 ﻿using API.Core.Extensions;
 using API.Core.Interfaces.Services;
+using API.Core.Utilities;
 using API.Infrastructure.DataAcess;
 using API.Infrastructure.Entities;
 using API.Infrastructure.Interfaces;
@@ -52,33 +53,26 @@ namespace API.Core.Services
             if (!HashTool.VerifyPassword(password, user.Password, user.PasswordSalt))
                 throw new UsernameOrPasswordIsWrongException();
 
-            string token = GenerateJWTToken(user);
+            string refreshToken = TokenUtility.GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
 
-            return new AuthUserDTO(token);
+            await _UnitOfWork.Save();
+
+            return new AuthUserDTO(TokenUtility.GenerateToken(user), refreshToken);
         }
 
-        private string GenerateJWTToken(User user)
+        public async Task<AuthUserDTO> GenerateTokenWithRefreshTokenAsync(string refreshToken)
         {
-            // generate token that is valid for 365 days
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(JWTSettings.Secret);
+            var user = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.RefreshToken == refreshToken && x.Active == true);
+            if (user == null)
+                throw new UsernameOrPasswordIsWrongException();
 
-            var claims = new List<Claim>();
+            string newRefreshToken = TokenUtility.GenerateRefreshToken();
+            user.RefreshToken = newRefreshToken;
 
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
-            claims.Add(new Claim(ClaimTypes.Name, user.Username == null ? user.Email : user.Username));
-            claims.Add(new Claim("FullName", string.IsNullOrEmpty((user.FirstName + user.LastName).Trim()) ? user.Email : $"{user.FirstName} {user.LastName}"));
-            claims.Add(new Claim(ClaimTypes.Role, ((RolesEnum)user.Role).ToString()));
+            await _UnitOfWork.Save();
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(365),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+            return new AuthUserDTO(TokenUtility.GenerateToken(user), newRefreshToken);
         }
 
         public async Task<UserDTO> GetByIDAsync(Guid ID)
@@ -116,6 +110,9 @@ namespace API.Core.Services
                 user.Password = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
+                string refreshToken = TokenUtility.GenerateRefreshToken();
+                user.RefreshToken = refreshToken;
+
                 _UnitOfWork.Repository<User>().Insert(user);
 
                 await _UnitOfWork.Save();
@@ -123,7 +120,7 @@ namespace API.Core.Services
                 await SendConfirmEmailToken(user.ID, EmailTypeEnum.ConfirmEmail);
 
                 transaction.Commit();
-                return new AuthUserDTO(GenerateJWTToken(user));
+                return new AuthUserDTO(TokenUtility.GenerateToken(user), refreshToken);
             }
         }
 

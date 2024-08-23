@@ -6,6 +6,7 @@ namespace API.Core.Interfaces.Services
     public interface IUserService
     {
         Task<AuthUserDTO> AuthenticateAsync(string usernameOrEmail, string password);
+        Task<AuthUserDTO> GenerateTokenWithRefreshTokenAsync(string refreshToken);
         Task<AuthUserDTO> RegisterAsync(RegisterUserDTO registerUser);
         Task<bool> UpdateAsync(Guid userId, UpdateUserPersonalInfoDTO updateUser);
         Task<bool> UpdateUsernameAsync(Guid userId, string? Username);

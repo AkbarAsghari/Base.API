@@ -39,6 +39,13 @@ namespace API.Controllers
             return Ok(await _userService.AuthenticateAsync(model.UsernameOrEmail, model.Password));
         }
 
+        [AllowAnonymous]
+        [HttpPost("GenerateTokenWithRefreshTokenAsync")]
+        public async Task<IActionResult> GenerateTokenWithRefreshTokenAsync([FromBody] RefreshTokenDTO model)
+        {
+            return Ok(await _userService.GenerateTokenWithRefreshTokenAsync(model.RefreshToken));
+        }
+
         /// <summary>
         /// Send a link to change your password if you forget it
         /// </summary>

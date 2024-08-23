@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Quartz;
 using API.Core.ScheduleJobs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Core.Extensions
 {
@@ -35,6 +36,14 @@ namespace API.Core.Extensions
                     ValidateAudience = false
                 };
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Weather.View",
+                    policy => policy.RequireAssertion(x => AssertClaim(x, "Weather.View")));
+            });
+
+            static bool AssertClaim(AuthorizationHandlerContext context, string claim) => context.User.HasClaim(x => x.Type == "Permissions" && x.Value == claim);
 
             //AutoMapper
             services.AddAutoMapper(typeof(AutoMapperProfile));
