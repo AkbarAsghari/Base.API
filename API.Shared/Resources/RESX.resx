@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CNameIsNotValid" xml:space="preserve">
+    <value>مقدار CName صحیح نمیباشد</value>
+  </data>
+  <data name="DomainIsInvalid" xml:space="preserve">
+    <value>دامنه وارد شده صحیح نیست</value>
+  </data>
+  <data name="EmailIsDuplicate" xml:space="preserve">
+    <value>ایمیل تکراری است</value>
+  </data>
+  <data name="EmailIsNotValid" xml:space="preserve">
+    <value>آدرس ایمیل درست نیست</value>
+  </data>
+  <data name="IPv4AddressIsNotValid" xml:space="preserve">
+    <value>آدرس IP درست نیست</value>
+  </data>
+  <data name="IPv6AddressIsNotValid" xml:space="preserve">
+    <value>آدرس آی پی اشتباه است</value>
+  </data>
+  <data name="MinimumNameLengthForPublicDomainIsFour" xml:space="preserve">
+    <value>برای دامنه های عمومی حداقل طول نام باید چهار کاراکتر باشد</value>
+  </data>
+  <data name="MobileIsDuplicate" xml:space="preserve">
+    <value>شماره موبایل تکراری است</value>
+  </data>
+  <data name="MobileIsNotValid" xml:space="preserve">
+    <value>شماره موبایل درست نیست</value>
+  </data>
+  <data name="NotImplemented" xml:space="preserve">
+    <value>این قابلیت پشتیبانی نمیشود</value>
+  </data>
+  <data name="OldPasswordIsWrong" xml:space="preserve">
+    <value>رمز عبور قبلی درست نیست</value>
+  </data>
+  <data name="PasswordMustBeMoreThan8Character" xml:space="preserve">
+    <value>رمز عبور باید بیشتر از 8 کاراکتر باشد</value>
+  </data>
+  <data name="PaymentNotFound" xml:space="preserve">
+    <value>پرداخت یافت نشد</value>
+  </data>
+  <data name="RecordDataNotFound" xml:space="preserve">
+    <value>اطلاعات رکورد یافت نشد</value>
+  </data>
+  <data name="RecordIsDuplicate" xml:space="preserve">
+    <value>رکورد تکراری است</value>
+  </data>
+  <data name="RecordNameIsRequired" xml:space="preserve">
+    <value>نام رکورد ضروری است</value>
+  </data>
+  <data name="RecordNotFound" xml:space="preserve">
+    <value>رکورد یافت نشد</value>
+  </data>
+  <data name="RecordTypeNotFound" xml:space="preserve">
+    <value>نوع رکورد یافت نشد</value>
+  </data>
+  <data name="TokenExpired" xml:space="preserve">
+    <value>کلید منقضی شده است</value>
+  </data>
+  <data name="TokenNameIsRequired" xml:space="preserve">
+    <value>نام توکن یافت نشد</value>
+  </data>
+  <data name="TokenNotFound" xml:space="preserve">
+    <value>کلید یافت نشد</value>
+  </data>
+  <data name="TokenRecordsCannotBeEmpty" xml:space="preserve">
+    <value>برای هر توکن حداقل یک رکورد باید انتخاب شود</value>
+  </data>
+  <data name="TokenUsedBefore" xml:space="preserve">
+    <value>کلید قبلا استفاده شده است</value>
+  </data>
+  <data name="TxtRecordDataCannotBeEmpty" xml:space="preserve">
+    <value>دیتای رکود TXT اشتباه است</value>
+  </data>
+  <data name="UnableToAddRecordAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان اضافه کمردن رکورد جدید وجود ندارد</value>
+  </data>
+  <data name="UnableToCreateZoneAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان ایجاد Zone وچود ندارد</value>
+  </data>
+  <data name="UnableToDeleteRecordAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان حذف رکورد وجود ندارد</value>
+  </data>
+  <data name="UnableToDeleteZoneAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان حذفZone وچود ندارد</value>
+  </data>
+  <data name="UnableToDisableRecordAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان غیر فعال یا فعالسازی رکورد وجود ندارد</value>
+  </data>
+  <data name="UnableToDisableZoneAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان غیر فعالسازی Zone وچود ندارد</value>
+  </data>
+  <data name="UnableToEnableZoneAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان فعالسازی Zone وچود ندارد</value>
+  </data>
+  <data name="UnableToUpdateRecordAtThisTime" xml:space="preserve">
+    <value>در حال حاضر امکان ویرایش کمردن رکورد وجود ندارد</value>
+  </data>
+  <data name="UsernameIsDuplicate" xml:space="preserve">
+    <value>نام کاربری تکراری است</value>
+  </data>
+  <data name="UsernameIsNotValid" xml:space="preserve">
+    <value>نام کاربری درست نیست</value>
+  </data>
+  <data name="UsernameOrPasswordIsWrong" xml:space="preserve">
+    <value>نام کاربری یا رمز عبور اشتباه است</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>کاربر یافت نشد</value>
+  </data>
+  <data name="ZoneIsDuplicate" xml:space="preserve">
+    <value>Zone تکراری است</value>
+  </data>
+  <data name="ZoneNotFound" xml:space="preserve">
+    <value>Zone یافت نشد</value>
+  </data>
+</root>

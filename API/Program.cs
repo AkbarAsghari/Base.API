@@ -23,8 +23,6 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.Configure<AppSettiungs>(builder.Configuration.GetSection("AllConfigurations"));
-
             //IP Limit
             builder.Services.AddScoped<ClientIpCheckActionFilter>(container =>
             {

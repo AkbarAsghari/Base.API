@@ -8,6 +8,7 @@ using API.Shared;
 using API.Shared.DTOs.Users;
 using API.Shared.Enums;
 using API.Shared.Exceptions;
+using API.Shared.Resources;
 using API.Shared.Utilities;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@ namespace API.Core.Services
         public async Task<AuthUserDTO> AuthenticateAsync(string usernameOrEmail, string password)
         {
             if (string.IsNullOrEmpty(usernameOrEmail.Trim()))
-                throw new UsernameIsNotValidException();
+                throw new ValidationException(RESX.UsernameIsNotValid);
 
             User? user;
             if (RegexTool.IsValidEmail(usernameOrEmail.Trim()))
@@ -48,11 +49,11 @@ namespace API.Core.Services
                 user = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.Username!.ToLower() == usernameOrEmail.ToLower() && x.Active == true);
 
             if (user == null)
-                throw new UsernameOrPasswordIsWrongException();
+                throw new ValidationException(RESX.UsernameOrPasswordIsWrong);
 
 
             if (!HashTool.VerifyPassword(password, user.Password, user.PasswordSalt))
-                throw new UsernameOrPasswordIsWrongException();
+                throw new ValidationException(RESX.UsernameOrPasswordIsWrong);
 
             string refreshToken = TokenUtility.GenerateRefreshToken();
             DateTime expiryTime = DateTime.UtcNow.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays);
@@ -69,10 +70,10 @@ namespace API.Core.Services
         {
             var user = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.RefreshToken == refreshToken && x.Active == true);
             if (user == null)
-                throw new TokenNotFoundException();
+                throw new NotFoundException(RESX.TokenNotFound);
 
             if (user.RefreshTokenExpiryTime.AddDays(JWTSettings.RefreshTokenExpiryTimeValidDays) < DateTime.UtcNow)
-                throw new TokenExpiredException();
+                throw new ValidationException(RESX.TokenExpired);
 
             await _UnitOfWork.Save();
 
@@ -94,12 +95,12 @@ namespace API.Core.Services
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
                 if (registerUser.Password.Length < 8)
-                    throw new PasswordLessThan8CharacterException();
+                    throw new ValidationException(RESX.PasswordMustBeMoreThan8Character);
                 if (!RegexTool.IsValidEmail(registerUser.Email))
-                    throw new EmailIsNotValidException();
+                    throw new ValidationException(RESX.EmailIsNotValid);
 
                 if (await _UnitOfWork.Repository<User>().AnyAsync(x => x.Email.ToLower() == registerUser.Email.ToLower()))
-                    throw new EmailIsDuplicateException();
+                    throw new DuplicateException(RESX.EmailIsDuplicate);
 
                 User user = new User();
 
@@ -137,11 +138,11 @@ namespace API.Core.Services
                 .SingleOrDefault(x => x.Token == token);
 
             if (confirmUserTicket == null)
-                throw new TokenNotFoundException();
+                throw new NotFoundException(RESX.TokenNotFound);
             if (DateTime.UtcNow > confirmUserTicket.ExpirationDate)
-                throw new TokenExpiredException();
+                throw new ValidationException(RESX.TokenExpired);
             if (confirmUserTicket.IsTokenUsed)
-                throw new TokenUsedBeforeException();
+                throw new ValidationException(RESX.TokenUsedBefore);
 
             var existUser = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == confirmUserTicket.UserId);
 
@@ -163,7 +164,7 @@ namespace API.Core.Services
                     .FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
-                    throw new UserNotFoundException();
+                    throw new NotFoundException(RESX.UserNotFound);
 
                 existUser.FirstName = updateUser.FirstName;
                 existUser.LastName = updateUser.LastName;
@@ -189,11 +190,11 @@ namespace API.Core.Services
         public async Task<bool> ForgetPasswordAsync(ForgetPasswordDTO forgetPassword)
         {
             if (!RegexTool.IsValidEmail(forgetPassword.Email))
-                throw new EmailIsNotValidException();
+                throw new ValidationException(RESX.EmailIsNotValid);
 
             var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.Email.ToLower() == forgetPassword.Email.ToLower());
             if (existUser == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException(RESX.UserNotFound);
 
             string token = HashTool.GenerateToken();
 
@@ -223,12 +224,12 @@ namespace API.Core.Services
                 .SingleOrDefault(x => x.Token == resetPassword.Token);
 
             if (resetPasswordTicket == null)
-                throw new TokenNotFoundException();
+                throw new NotFoundException(RESX.TokenNotFound);
 
             if (DateTime.UtcNow > resetPasswordTicket.ExpirationDate)
-                throw new TokenExpiredException();
+                throw new ValidationException(RESX.TokenExpired);
             if (resetPasswordTicket.IsTokenUsed)
-                throw new TokenUsedBeforeException();
+                throw new ValidationException(RESX.TokenUsedBefore);
 
             var existUser = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == resetPasswordTicket.UserId);
 
@@ -249,14 +250,14 @@ namespace API.Core.Services
         public async Task<bool> ChangePasswordAsync(Guid userId, ChangePasswordDTO changePassword)
         {
             if (changePassword.NewPassword.Length < 8)
-                throw new PasswordLessThan8CharacterException();
+                throw new ValidationException(RESX.PasswordMustBeMoreThan8Character);
 
             var existUser = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == userId);
             if (existUser == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException(RESX.UserNotFound);
 
             if (!HashTool.VerifyPassword(changePassword.CurrentPassword, existUser.Password, existUser.PasswordSalt))
-                throw new OldPasswordIsWrongException();
+                throw new ValidationException(RESX.UsernameOrPasswordIsWrong);
 
             string passwordHash, passwordSalt;
             HashTool.CreatePasswordHash(changePassword.NewPassword, out passwordHash, out passwordSalt);
@@ -274,7 +275,7 @@ namespace API.Core.Services
 
             var user = await _UnitOfWork.Repository<User>().SingleOrDefault(x => x.ID == ID);
             if (user == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException(RESX.UserNotFound);
 
             user.Active = false;
             _UnitOfWork.Repository<User>().Update(user);
@@ -287,15 +288,15 @@ namespace API.Core.Services
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
                 if (!RegexTool.IsValidEmail(email))
-                    throw new EmailIsNotValidException();
+                    throw new ValidationException(RESX.EmailIsNotValid);
 
                 if (await _UnitOfWork.Repository<User>().IgnoreQueryFilters().AnyAsync(x => x.Email.ToLower() == email.ToLower() && x.ID != userId))
-                    throw new EmailIsDuplicateException();
+                    throw new DuplicateException(RESX.EmailIsDuplicate);
 
                 var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
-                    throw new UserNotFoundException();
+                    throw new NotFoundException(RESX.UserNotFound);
                 if (existUser.Email == email.Trim())
                     return true;
 
@@ -317,15 +318,15 @@ namespace API.Core.Services
             using (var transaction = await _UnitOfWork.GetDBTransaction)
             {
                 if (!RegexTool.IsValidMobile(mobile))
-                    throw new MobileIsNotValidException();
+                    throw new ValidationException(RESX.MobileIsNotValid);
 
                 if (await _UnitOfWork.Repository<User>().IgnoreQueryFilters().AnyAsync(x => x.Mobile == mobile.Trim() && x.ID != userId))
-                    throw new MobileIsDuplicateException();
+                    throw new DuplicateException(RESX.MobileIsDuplicate);
 
                 var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
-                    throw new UserNotFoundException();
+                    throw new NotFoundException(RESX.UserNotFound);
                 if (existUser.Mobile == mobile.Trim())
                     return true;
 
@@ -345,7 +346,7 @@ namespace API.Core.Services
             var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
             if (existUser == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException(RESX.UserNotFound);
 
             return await SendConfirmEmailToken(userId, EmailTypeEnum.ResendActivationLink);
         }
@@ -378,7 +379,7 @@ namespace API.Core.Services
             var existUser = await _UnitOfWork.Repository<User>().FirstOrDefault(x => x.ID == userId);
 
             if (existUser == null)
-                throw new UserNotFoundException();
+                throw new NotFoundException(RESX.UserNotFound);
 
             existUser.Role = (int)role;
 
@@ -396,17 +397,17 @@ namespace API.Core.Services
                 else
                 {
                     if (!RegexTool.IsValidUsername(Username))
-                        throw new UsernameIsNotValidException();
+                        throw new ValidationException(RESX.UsernameIsNotValid);
 
                     if (await _UnitOfWork.Repository<User>().AnyAsync(x => x.Username!.ToLower() == Username.ToLower() && x.ID != userId))
-                        throw new UsernameIsDuplicateException();
+                        throw new DuplicateException(RESX.UsernameIsDuplicate);
                 }
 
                 var existUser = await _UnitOfWork.Repository<User>()
                         .FirstOrDefault(x => x.ID == userId);
 
                 if (existUser == null)
-                    throw new UserNotFoundException();
+                    throw new NotFoundException(RESX.UserNotFound);
 
                 existUser.Username = Username;
 

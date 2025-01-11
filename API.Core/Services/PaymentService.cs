@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using API.Shared.Resources;
 
 namespace API.Core.Services
 {
@@ -42,7 +43,7 @@ namespace API.Core.Services
         {
             var existTransaction = await _UnitOfWork.Repository<Payment>().FirstOrDefault(x => x.TrackId == trackId);
             if (existTransaction == null)
-                throw new PaymentNotFoundException();
+                throw new NotFoundException(RESX.PaymentNotFound);
 
             var requestData = new InquiryDTO
             {
@@ -71,7 +72,7 @@ namespace API.Core.Services
         {
             var existTransaction = await _UnitOfWork.Repository<Payment>().FirstOrDefault(x => x.TrackId == trackId);
             if (existTransaction == null)
-                throw new PaymentNotFoundException();
+                throw new NotFoundException(RESX.PaymentNotFound);
 
             if (existTransaction.PaymentStatusId == (int)ZibalStatusEnum.PaidConfirmed)
                 return true;
